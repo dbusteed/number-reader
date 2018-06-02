@@ -19,3 +19,8 @@ Lil machine learning implementation that recognizes handwritten numbers
 
 * pic.jpg
   * input for the thingy. it is 50x50 pixels. simply overwrite this file each time you are running the program
+
+## Example
+---
+
+![Demonstration of the number reader](https://github.com/dbusteed/asdf/number.gif)
