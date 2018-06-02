@@ -23,4 +23,4 @@ Lil machine learning implementation that recognizes handwritten numbers
 ## Example
 ---
 
-![Demonstration of the number reader](https://github.com/dbusteed/asdf/number.gif)
+![Demonstration of the number reader](https://user-images.githubusercontent.com/25671855/40880296-a0554cfe-6673-11e8-8c4f-c8c3c3f78701.gif)
