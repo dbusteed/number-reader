@@ -1,0 +1,28 @@
+# Number Reader
+
+Lil machine learning implementation that recognizes handwritten numbers
+
+
+## Files
+---
+* guess.py
+  * Main script for recognizing numbers. Draw a number in pic.jpg (i just use paint), save, and run guess.py
+  ```
+  C:\> python guess.py
+  ```
+  * if the guess is incorrect, you can improve the data by giving the actual written number and adding this data to the learning model
+
+* loadpic.py
+  * this is only helpful if starting from scratch. you can create some basic data for the model to use by drawing a number and runnning this
+
+* data.csv
+  * where the data is at! first column is the number, and all the rest are the pixels of the corresponging image
+
+* pic.jpg
+  * input for the thingy. it is 50x50 pixels. simply overwrite this file each time you are running the program
+
+
+## Example
+---
+
+![Demonstration of the number reader](https://user-images.githubusercontent.com/25671855/40880296-a0554cfe-6673-11e8-8c4f-c8c3c3f78701.gif)
