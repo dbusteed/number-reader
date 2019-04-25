@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+
+    <script>
+        var canvas, ctx;
+        var mouseX, mouseY, mouseDown = 0;
+
+        function draw(ctx,x,y,size) {
+            ctx.fillStyle = "#000000";
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI*2, true);
+            ctx.closePath();
+            ctx.fill();
+            processSketch();
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function onMouseDown() {
+            mouseDown = 1;
+            draw(ctx, mouseX, mouseY, 2);
+        }
+
+        function onMouseUp() {
+            mouseDown = 0;
+        }
+
+        function onMouseMove(e) {
+            getMousePos(e);
+            if (mouseDown == 1) {
+                draw(ctx, mouseX, mouseY, 2);
+            }
+        }
+
+        function getMousePos(e) {
+            if (!e)
+                var e = event;
+            if (e.offsetX) {
+                mouseX = e.offsetX;
+                mouseY = e.offsetY;
+            }
+            else if (e.layerX) {
+                mouseX = e.layerX;
+                mouseY = e.layerY;
+            }
+        }
+
+        function init() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            canvas.addEventListener('mousedown', onMouseDown, false);
+            canvas.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('mouseup', onMouseUp, false);
+        }
+
+        function processSketch()
+        {
+            let raw = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            let pixels = [];
+
+            for(i=0; i<raw.length; i+=4)
+            {
+                let thing = 255-raw[i+3];
+                pixels.push.apply(pixels, [thing, thing, thing]);
+            }
+
+            document.getElementById('pixels').value = pixels;
+        }
+    </script>
+</head>
+<body onload="init();">
+    
+    <div class="big">
+        <p class="instructions">
+            Draw a number 0-9, and click predict! <br><br>
+            Please draw slowly, so that the digit is a continuous line, <br>
+            and try to center the number within the box
+
+        </p>
+        
+        <canvas id="canvas" width="50" height="50" style="border:1px solid #000000;"></canvas>
+        
+        <form action="/predict" method="POST" autocomplete="off">
+            <input id="pixels" name="pixels" type="hidden" />
+            <input class="small" type="submit" value="Predict" />
+        </form>
+        
+        <button class="small" onclick="clearCanvas();">Clear</button>            
+    </div>
+</body>
+</html>

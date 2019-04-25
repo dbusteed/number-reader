@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div>
+        <p class="result">Did you write a <span class="pred">{{ pred }}</span>?</p> <br>
+        
+        <form action="/update" method="POST" autocomplete="off">
+            <input type="hidden" name="pred_num" value="{{ pred }}" />
+            <input type="radio" name="yesno" value="yes" checked>Yes <br>
+            <input type="radio" name="yesno" value="no">No (enter actual value)
+            <input type="text" name="real_num" /> <br><br>
+            <input type="submit" value="Save" /> 
+            <p>Please don't save inaccruate values, or unrealistically drawn numbers, <br>
+                instead, just hit the cancel button bellow
+            </p>
+        </form>
+
+        <br>
+        
+        <a href="/">Cancel</a>
+    </div>
+</body>
+</html>
