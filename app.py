@@ -10,7 +10,12 @@ app.secret_key = 'blahblahblah'
 
 @app.route('/')
 def index():
+    session.clear()
+    return render_template('index.html')
 
+@app.route('/ml')
+def ml():
+    session['ml'] = True
     return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
@@ -45,7 +50,9 @@ def predict():
     pred = clf.predict([pixels])
     pred = int(tuple(pred)[0])
 
-    return render_template('result.html', pred=pred)
+    ml = session.get('ml', False)
+
+    return render_template('result.html', pred=pred, ml=ml)
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -93,4 +100,4 @@ def add_new():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

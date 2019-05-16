@@ -81,11 +81,10 @@
             Draw a number 0-9, and click predict! <br><br>
             Please draw slowly, so that the digit is a continuous line, <br>
             and try to center the number within the box
-
         </p>
         
         <canvas id="canvas" width="50" height="50" style="border:1px solid #000000;"></canvas>
-        
+
         <form action="/predict" method="POST" autocomplete="off">
             <input id="pixels" name="pixels" type="hidden" />
             <input class="small" type="submit" value="Predict" />
