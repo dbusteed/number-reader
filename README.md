@@ -1,13 +1,13 @@
 # lil' machine learning flask app for recognizing numbers
 
-### checkout live app
+## checkout live app
 
-i currently have it hosted on my raspberry pi [here](davis.mine.bz:5000)
+i currently have it hosted on my raspberry pi [here](http://davis.mine.bz:5000)
 (i might forget to update the DNS/IP, so apologies if the link is down)
 
 navigate to `/ml` to enable "machine learning" mode, which allows the user to confirm predictions and add data to the system. this path is kinda hidden to prevent people from entering bad data.
 
-### run on your local machine
+## run on your local machine
 
 1. `git clone https://github.com/dbusteed/number-reader`
 2. `cd number-reader`
@@ -18,7 +18,7 @@ navigate to `/ml` to enable "machine learning" mode, which allows the user to co
 
 NOTE: for UNIX machines use `pip3` and `python3`
 
-### deploy on a raspberry pi
+## deploy on a raspberry pi
 
 1. `git clone https://github.com/dbusteed/number-reader`
 2. `cd number-reader`
