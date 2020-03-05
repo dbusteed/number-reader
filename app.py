@@ -1,9 +1,13 @@
+#!/usr/bin/env python3
+
 from flask import Flask, render_template, request, redirect, url_for, session
 from sklearn import svm
 from PIL import Image
+from joblib import dump, load
 import csv
 
 DATA_PATH = 'nums.csv'
+RETRAIN_RATE = 10
 
 app = Flask(__name__)
 app.secret_key = 'blahblahblah'
@@ -21,38 +25,55 @@ def ml():
 @app.route('/predict', methods=['POST'])
 def predict():
 
-    pixels_str = request.form['pixels']
-    pixels = pixels_str.split(',')
+    try:
+        pixels_str = request.form['pixels']
+        pixels = pixels_str.split(',')
 
-    session['pixels'] = pixels
+        session['pixels'] = pixels
 
-    # build the SVM model
-    data = []
-    with open(DATA_PATH) as f:
-        reader = csv.reader(f)
-        for r in reader:
-            data.append(r)
+        indicator = int(open('build_indicator.txt', 'r').read())
+        print(indicator)
 
-    labels, values = [], []
+        # grab saved model
+        if indicator > 0:
+            print('using saved model')
+            clf = load('clf.model')
 
-    for row in data:
-        labels.append(int(row[0]))
-        
-        vals = row[1:]
-        vals_ints = [int(x) for x in vals]
-        
-        values.append(vals_ints)
+        # build the SVM model
+        else:
+            print('building new model')
+            data = []
+            with open(DATA_PATH) as f:
+                reader = csv.reader(f)
+                for r in reader:
+                    data.append(r)
 
-    clf = svm.SVC(kernel='linear')
-        
-    clf = clf.fit(values, labels)
+            labels, values = [], []
 
-    pred = clf.predict([pixels])
-    pred = int(tuple(pred)[0])
+            for row in data:
+                labels.append(int(row[0]))
+                
+                vals = row[1:]
+                vals_ints = [int(x) for x in vals]
+                
+                values.append(vals_ints)
 
-    ml = session.get('ml', False)
+            clf = svm.SVC(kernel='linear') 
+            clf = clf.fit(values, labels)
 
-    return render_template('result.html', pred=pred, ml=ml)
+            dump(clf, 'clf.model')
+            with open('build_indicator.txt', 'w') as f:
+                f.write(f'{RETRAIN_RATE}')
+
+        pred = clf.predict([pixels])
+        pred = int(tuple(pred)[0])
+
+        ml = session.get('ml', False)
+
+        return render_template('result.html', pred=pred, ml=ml)
+    
+    except:
+        return render_template('error.html')
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -71,7 +92,7 @@ def update():
         return render_template('error.html')
 
     pixels = session['pixels']
-    pixels.insert(0, ins_num)
+    pixels.insert(0, ins_num)    
 
     pixels = [pixels]
 
@@ -79,25 +100,34 @@ def update():
         writer = csv.writer(file)
         writer.writerows(pixels)   
 
-    return render_template('index.html')
-
-@app.route('/addNew', methods=['POST'])
-def add_new():
-    
-    num = request.form['num']
-    
-    pixels_str = request.form['pixels']
-    pixels = pixels_str.split(',')
-
-    pixels.insert(0, num)
-
-    pixels = [pixels]
-
-    with open(DATA_PATH, 'a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(pixels)
+    indicator = int(open('build_indicator.txt', 'r').read())
+    with open('build_indicator.txt', 'w') as f:
+        f.write(f'{indicator-1}')
 
     return render_template('index.html')
+
+#
+#   use when starting from scratch.
+#   just change the <form> action 
+#   from "/predict" to "/addNew"
+# 
+# @app.route('/addNew', methods=['POST'])
+# def add_new():
+    
+#     num = request.form['num']
+    
+#     pixels_str = request.form['pixels']
+#     pixels = pixels_str.split(',')
+
+#     pixels.insert(0, num)
+
+#     pixels = [pixels]
+
+#     with open(DATA_PATH, 'a', newline='') as file:
+#         writer = csv.writer(file)
+#         writer.writerows(pixels)
+
+#     return render_template('index.html')
 
 if __name__ == '__main__':
     app.run()

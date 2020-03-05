@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-
+        
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
 
     <script>
@@ -73,6 +74,8 @@
             document.getElementById('pixels').value = pixels;
         }
     </script>
+
+
 </head>
 <body onload="init();">
     
@@ -84,13 +87,16 @@
         </p>
         
         <canvas id="canvas" width="50" height="50" style="border:1px solid #000000;"></canvas>
-
-        <form action="/predict" method="POST" autocomplete="off">
-            <input id="pixels" name="pixels" type="hidden" />
-            <input class="small" type="submit" value="Predict" />
-        </form>
         
-        <button class="small" onclick="clearCanvas();">Clear</button>            
+        <div class="main-buttons">        
+            <form action="/predict" method="POST" autocomplete="off">
+                <input id="pixels" name="pixels" type="hidden" />
+                <input class="btn btn-secondary btn-sm" type="submit" value="predict" />
+            </form>
+    
+            <button type="button" class="btn btn-secondary btn-sm" onclick="clearCanvas();">clear</button>
+        </div>
     </div>
+
 </body>
 </html>

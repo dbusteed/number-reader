@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-    <div>
+    <div class="container">
         <p class="result">Did you write a <span class="pred">{{ pred }}</span>?</p> <br>
 
         {% if ml %}
@@ -34,7 +34,7 @@
 
             <br>
             
-            <a href="/">Cancel</a>
+            <a href="/ml">Cancel</a>
 
         {% else %}
 
